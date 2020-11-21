@@ -1,10 +1,11 @@
 const express = require('express')
-const {moviesMock} = require('../utils/mocks/movies')
+const MoviesService = require('../services/movies')
 
 function moviesAPI (app) {
   const router = express.Router()
 
   app.use('/api/movies', router)
+  const moviesService = new MoviesService()
 
 
   app.get('/', async (req, res, next) =>{
