@@ -1,0 +1,41 @@
+const joi = require('joi')
+
+const movieIdSchema = joi.string().regex(/^[0-9a-fA-F]$/)
+
+const movieTitleSchema = joi.string().max(80)
+const movieYearSchema = joi.string().min(1888)
+const movieCoverSchema = joi.string().uri()
+const movieDescriptionSchema = joi.string().max(280)
+const movieDurationSchema = joi.string().min(1).max(300)
+const movieContentRatingSchema = joi.string().max(5)
+const movieSourceSchema = joi.string().uri()
+const movieTagsSchema = joi.array().items(joi.string())
+
+
+const createMovieSchema = {
+    title : movieTitleSchema.required(),
+    year : movieYearSchema.required(),
+    cover : movieCoverSchema.required(),
+    description : movieDescriptionSchema.required(),
+    duration : movieDurationSchema.required(),
+    contentRating : movieContentRatingSchema.required(),
+    source : movieSourceSchema.required(),
+    tags : movieTagsSchema
+}
+
+const updateMovieSchema={
+    title : movieTitleSchema,
+    year : movieYearSchema,
+    cover : movieCoverSchema,
+    description : movieDescriptionSchema,
+    duration : movieDurationSchema,
+    contentRating : movieContentRatingSchema,
+    source : movieSourceSchema,
+    tags : movieTagsSchema
+}
+
+module.exports = {
+    movieIdSchema,
+    createMovieSchema,
+    updateMovieSchema
+}
