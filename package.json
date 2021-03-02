@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "set NODE_ENV=development && set DEBUG=app:* && nodemon index",
     "start": "set NODE_ENV=production && node index",
-    "test": "set NODE_ENV=development && mocha --exit"
+    "test": "set NODE_ENV=development && mocha --exit",
+    "cover": "nyc npm run test",
+    "report": "nyc report --reporter=html && start coverage/index.html"
   },
   "keywords": [],
   "author": "",
@@ -38,5 +40,9 @@
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
+  },
+  "nyc":{
+    "all": true,
+    "include": ["routes", "services", "lib","utils"]
   }
 }
