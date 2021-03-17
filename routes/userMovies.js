@@ -3,9 +3,9 @@ const express = require('express')
 const UserMovieService = require('../services/userMovies')
 const validationHandler = require('../utils/middleware/validationHandler')
 
-//const {userMovieIdSchema} = require('../utils/schemas/userMovies')
+const {createUserMovieSchema} = require('../utils/schemas/userMovies')
 const {userIdSchema} = require('../utils/schemas/users')
-//const {movieIdSchema} = require('../utils/schemas/movies')
+const {movieIdSchema} = require('../utils/schemas/movies')
 
 function UserMoviesApi(app) {
     const router = express.Router()
@@ -13,7 +13,7 @@ function UserMoviesApi(app) {
 
     const userMovieService = new UserMovieService()
 
-    router.get('/', validationHandler({userIdSchema},'query'), async function(req,res,next){
+    router.get('/', validationHandler({userId: userIdSchema},'query'), async function(req,res,next){
         const  {userId} = req.query
 
         try {
@@ -26,5 +26,37 @@ function UserMoviesApi(app) {
         } catch(error) {
             next(error)
         }
+    });
+
+    router.post('/',validationHandler(createUserMovieSchema), async function(req,res,next){
+        const {body: userMovie} = req
+
+        try{
+            const createduserMovieId = await userMovieService.createUserMovie({ userMovie })
+
+            res.status(201).json({
+                data: createduserMovieId,
+                message: 'user movie created'
+            })
+        } catch(error) {
+            next(error)
+        }
+    })
+
+    router.delete('/:userMovieId',validationHandler({userMovieId : movieIdSchema},'params'), async function(req,res,next){
+        const {userMovieId} = req.params
+
+        try{
+            const deletedUserMovieId = await userMovieService.deleteUserMovie({ userMovieId })
+
+            res.status(200).json({
+                data: deletedUserMovieId,
+                message: 'user movie deleted'
+            })
+        } catch(error) {
+            next(error)
+        }
     })
 }
+
+module.exports = UserMoviesApi
