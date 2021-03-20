@@ -3,6 +3,7 @@ const app = express();
 
 const { config } = require("./config/index");
 const moviesAPI = require("./routes/movies");
+const authAPI = require("./routes/auth");
 const UserMoviesApi = require('./routes/userMovies')
 
 const {
@@ -17,6 +18,7 @@ const notFoundHandler = require("./utils/middleware/notFoundHandler");
 app.use(express.json());
 
 //rutas
+authAPI(app)
 moviesAPI(app);
 UserMoviesApi(app);
 //catch 404
