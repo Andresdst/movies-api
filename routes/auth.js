@@ -3,6 +3,9 @@ const passport= require('passport')
 const boom = require('@hapi/boom')
 const jwt = require('jsonwebtoken')
 const ApiKeysService = require('../services/apiKeys')
+const UsersServices = require('../services/users')
+const validationHandler = require('../utils/middleware/validationHandler')
+const {createUserSchema} = require('../utils/schemas/users')
 
 const {config} = require('../config/index')
 
@@ -15,6 +18,7 @@ function authApi(app){
     app.use('/api/auth',router)
 
     const apiKeysService = new ApiKeysService()
+    const usersServices = new UsersServices()
 
     router.post('/sign-in', async function(req,res,next){
         const {apiKeyToken} = req.body
@@ -60,6 +64,21 @@ function authApi(app){
                 next(err)
             }
         })(req,res,next) //closure ya que es un custom callback
+    })
+
+    router.post('/sign-up', validationHandler(createUserSchema), async function(req,res,next){
+        const{body:user} = req
+
+        try{
+            const createUserId = await usersServices.createUser({user})
+
+            res.status(201).json({
+                data:createUserId,
+                message:'user created'
+            })
+        } catch(err) {
+            next(err)
+        }
     })
 }
 
