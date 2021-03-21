@@ -35,7 +35,7 @@ function moviesAPI(app) {
   router.get("/:movieId",
   passport.authenticate('jwt', {session:false}),
   scopesValidationHandler(['read:movies']),
-  validationHandler({id: movieIdSchema}, 'params'),
+  validationHandler({movieId: movieIdSchema}, 'params'),
   async function (req, res, next) {
     const { movieId } = req.params;
 

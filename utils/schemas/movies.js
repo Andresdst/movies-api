@@ -1,6 +1,6 @@
 const joi = require('joi')
 
-const movieIdSchema = joi.string().regex(/^[0-9a-fA-F]$/)
+const movieIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/)
 
 const movieTitleSchema = joi.string().max(80)
 const movieYearSchema = joi.number().min(1888)

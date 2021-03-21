@@ -7,8 +7,8 @@ function scopesValidationHandler(allowedScopes) {
         }
 
         const hasAccess = allowedScopes
-        .map(allowebscope => {req.user.scopes.include(allowebscope)})
-        .find(allowed =>{Boolean(allowed)})
+        .map(allowebscope => req.user.scopes.includes(allowebscope))//no usar llaves para return explicito
+        .find(allowed =>Boolean(allowed))
 
         if(hasAccess) {
             next()
